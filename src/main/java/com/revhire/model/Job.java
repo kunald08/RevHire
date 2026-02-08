@@ -10,6 +10,11 @@ public class Job {
     private double salary;
     private String jobType;
 
+    // 🔥 PHASE 3 ADDITION
+    private int employerId;
+
+    // -------- GETTERS & SETTERS --------
+
     public int getId() {
         return id;
     }
@@ -64,5 +69,14 @@ public class Job {
 
     public void setJobType(String jobType) {
         this.jobType = jobType;
+    }
+
+    // 🔥 PHASE 3 GETTER & SETTER
+    public int getEmployerId() {
+        return employerId;
+    }
+
+    public void setEmployerId(int employerId) {
+        this.employerId = employerId;
     }
 }
