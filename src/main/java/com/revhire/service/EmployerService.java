@@ -1,7 +1,11 @@
 package com.revhire.service;
 
-import com.revhire.dao.impl.*;
-import com.revhire.model.*;
+import com.revhire.dao.impl.ApplicationDaoImpl;
+import com.revhire.dao.impl.CompanyDaoImpl;
+import com.revhire.dao.impl.JobDaoImpl;
+import com.revhire.model.Application;
+import com.revhire.model.Company;
+import com.revhire.model.Job;
 
 import java.util.List;
 
@@ -15,22 +19,37 @@ public class EmployerService {
         return companyDao.createCompany(c);
     }
 
-    public Company getCompany(int employerId) {
-        return companyDao.getCompanyByEmployerId(employerId);
-    }
-
     public boolean postJob(Job j) {
         return jobDao.createJob(j);
     }
 
     public void viewMyJobs(int employerId) {
-        List<Job> jobs = jobDao.getJobsByEmployer(employerId);
-        jobs.forEach(j ->
-                System.out.println(j.getId() + " | " + j.getTitle() + " | " + j.getLocation())
-        );
+        jobDao.getJobsByEmployer(employerId)
+                .forEach(j ->
+                        System.out.println(j.getId() + " | " + j.getTitle() + " | " + j.getLocation())
+                );
     }
 
+    // 🔥 NEW
     public void viewApplicants(int jobId) {
-        appDao.getApplicationsByUser(jobId); // placeholder (we’ll improve)
+        List<Application> apps = appDao.getApplicationsByJob(jobId);
+
+        if (apps.isEmpty()) {
+            System.out.println("No applicants yet");
+            return;
+        }
+
+        for (Application a : apps) {
+            System.out.println(
+                    "AppID: " + a.getId() +
+                            " | Name: " + a.getApplicantName() +
+                            " | Email: " + a.getApplicantEmail() +
+                            " | Status: " + a.getStatus()
+            );
+        }
+    }
+
+    public boolean updateApplicationStatus(int appId, String status) {
+        return appDao.updateStatus(appId, status);
     }
 }

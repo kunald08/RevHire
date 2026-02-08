@@ -11,5 +11,10 @@ public interface ApplicationDao {
 
     List<Application> getApplicationsByUser(int userId);
 
+    // PHASE 3
+    List<Application> getApplicationsByJob(int jobId);
+
+    boolean updateStatus(int applicationId, String status);
+
     boolean withdrawApplication(int appId);
 }

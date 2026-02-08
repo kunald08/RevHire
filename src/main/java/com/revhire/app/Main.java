@@ -88,16 +88,16 @@ public class Main {
                                 case 1 -> js.viewAllJobs();
 
                                 case 2 -> {
-                                    System.out.print("Title (blank for any): ");
+                                    System.out.print("Title (blank = any): ");
                                     String title = sc.nextLine();
 
-                                    System.out.print("Location (blank for any): ");
+                                    System.out.print("Location (blank = any): ");
                                     String location = sc.nextLine();
 
                                     System.out.print("Job Type (FULL_TIME / PART_TIME / blank): ");
                                     String type = sc.nextLine();
 
-                                    System.out.print("Min Experience (0 for any): ");
+                                    System.out.print("Min Experience (0 = any): ");
                                     int expIn = sc.nextInt();
                                     sc.nextLine();
 
@@ -172,7 +172,10 @@ public class Main {
                             System.out.println("1. Create Company");
                             System.out.println("2. Post Job");
                             System.out.println("3. View My Jobs");
-                            System.out.println("4. Logout");
+                            System.out.println("4. View Applicants");
+                            System.out.println("5. Shortlist Applicant");
+                            System.out.println("6. Reject Applicant");
+                            System.out.println("7. Logout");
 
                             int ch = sc.nextInt();
                             sc.nextLine();
@@ -233,11 +236,34 @@ public class Main {
                                 case 3 -> es.viewMyJobs(user.getId());
 
                                 case 4 -> {
+                                    System.out.print("Job ID: ");
+                                    int jobId = sc.nextInt();
+                                    sc.nextLine();
+                                    es.viewApplicants(jobId);
+                                }
+
+                                case 5 -> {
+                                    System.out.print("Application ID: ");
+                                    int appId = sc.nextInt();
+                                    sc.nextLine();
+                                    es.updateApplicationStatus(appId, "SHORTLISTED");
+                                    System.out.println("✅ Applicant shortlisted");
+                                }
+
+                                case 6 -> {
+                                    System.out.print("Application ID: ");
+                                    int appId = sc.nextInt();
+                                    sc.nextLine();
+                                    es.updateApplicationStatus(appId, "REJECTED");
+                                    System.out.println("❌ Applicant rejected");
+                                }
+
+                                case 7 -> {
                                     System.out.println("🔒 Logged out");
                                     break;
                                 }
                             }
-                            if (ch == 4) break;
+                            if (ch == 7) break;
                         }
                     }
                 }
