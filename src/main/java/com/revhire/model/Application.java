@@ -10,6 +10,16 @@ public class Application {
     // extra info for employer view
     private String applicantName;
     private String applicantEmail;
+    private String comment;
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
 
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }

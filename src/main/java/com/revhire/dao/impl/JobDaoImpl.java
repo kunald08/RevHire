@@ -130,5 +130,50 @@ public class JobDaoImpl implements JobDao {
         }
         return list;
     }
+    @Override
+    public boolean updateJob(Job j) {
+
+        String sql = """
+        UPDATE jobs
+        SET title=?, company=?, location=?, experience=?, salary=?, job_type=?
+        WHERE id=? AND employer_id=?
+    """;
+
+        try (Connection con = DBUtil.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, j.getTitle());
+            ps.setString(2, j.getCompany());
+            ps.setString(3, j.getLocation());
+            ps.setInt(4, j.getExperience());
+            ps.setDouble(5, j.getSalary());
+            ps.setString(6, j.getJobType());
+            ps.setInt(7, j.getId());
+            ps.setInt(8, j.getEmployerId());
+
+            return ps.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean updateJobStatus(int jobId, String status) {
+
+        String sql = "UPDATE jobs SET status=? WHERE id=?";
+
+        try (Connection con = DBUtil.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, status);
+            ps.setInt(2, jobId);
+            return ps.executeUpdate() > 0;
+
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
 
 }

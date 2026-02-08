@@ -11,54 +11,76 @@ public class JobSeekerService {
     private ResumeDaoImpl resumeDao = new ResumeDaoImpl();
     private ApplicationDaoImpl appDao = new ApplicationDaoImpl();
 
+    private NotificationDaoImpl notificationDao = new NotificationDaoImpl();
+
+    // ================= JOBS =================
+
     public void viewAllJobs() {
-        printJobs(jobDao.getAllJobs());
+        List<Job> jobs = jobDao.getAllJobs();
+        jobs.forEach(j ->
+                System.out.println(
+                        j.getId() + " | " +
+                                j.getTitle() + " | " +
+                                j.getCompany() + " | " +
+                                j.getLocation()
+                )
+        );
     }
 
     public void searchJobs(String title, String location, String type, Integer exp) {
-        printJobs(jobDao.searchJobs(title, location, type, exp));
+        jobDao.searchJobs(title, location, type, exp)
+                .forEach(j ->
+                        System.out.println(
+                                j.getId() + " | " +
+                                        j.getTitle() + " | " +
+                                        j.getCompany() + " | " +
+                                        j.getLocation()
+                        )
+                );
     }
 
-    private void printJobs(List<Job> jobs) {
-        if (jobs.isEmpty()) {
-            System.out.println("❌ No jobs found");
-            return;
-        }
-        for (Job j : jobs) {
-            System.out.println(
-                    j.getId() + " | " +
-                            j.getTitle() + " | " +
-                            j.getCompany() + " | " +
-                            j.getLocation() + " | " +
-                            j.getJobType() + " | Exp: " +
-                            j.getExperience()
-            );
-        }
-    }
+    // ================= RESUME =================
 
     public boolean createResume(Resume r) {
         return resumeDao.saveResume(r);
     }
 
-    public boolean applyJob(int userId, int jobId) {
+    // ================= APPLICATION =================
 
-        if (resumeDao.getResumeByUserId(userId) == null) {
-            System.out.println("❌ Create resume before applying");
-            return false;
-        }
+    public boolean applyJob(int userId, int jobId) {
         return appDao.applyJob(userId, jobId);
     }
 
     public void viewApplications(int userId) {
-        appDao.getApplicationsByUser(userId)
-                .forEach(a ->
-                        System.out.println("AppID: " + a.getId() +
-                                " JobID: " + a.getJobId() +
-                                " Status: " + a.getStatus())
-                );
+
+        appDao.getApplicationsByUser(userId).forEach(a -> {
+
+            System.out.println(
+                    "AppID: " + a.getId() +
+                            " | JobID: " + a.getJobId() +
+                            " | Status: " + a.getStatus()
+            );
+
+            // ✅ SHOW COMMENT IF EXISTS
+            if (a.getComment() != null && !a.getComment().isBlank()) {
+                System.out.println("   💬 Comment: " + a.getComment());
+            }
+
+            System.out.println("--------------------------------");
+        });
     }
+
 
     public boolean withdraw(int appId) {
         return appDao.withdrawApplication(appId);
+    }
+
+    // ================= NOTIFICATIONS =================
+
+    public void viewNotifications(int userId) {
+        notificationDao.getUserNotifications(userId)
+                .forEach(n ->
+                        System.out.println("🔔 " + n.getMessage())
+                );
     }
 }

@@ -9,8 +9,17 @@ public class Job {
     private int experience;
     private double salary;
     private String jobType;
+    private String status;
 
-    // 🔥 PHASE 3 ADDITION
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    // PHASE 3 ADDITION
     private int employerId;
 
     // -------- GETTERS & SETTERS --------

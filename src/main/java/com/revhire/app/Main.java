@@ -3,7 +3,7 @@ package com.revhire.app;
 import com.revhire.model.*;
 import com.revhire.service.*;
 
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
 
@@ -39,10 +39,11 @@ public class Main {
                     System.out.print("Role (JOB_SEEKER / EMPLOYER): ");
                     u.setRole(sc.nextLine());
 
-                    if (authService.register(u))
-                        System.out.println("✅ Registration successful");
-                    else
-                        System.out.println("❌ Registration failed");
+                    System.out.println(
+                            authService.register(u)
+                                    ? "✅ Registration successful"
+                                    : "❌ Registration failed"
+                    );
                 }
 
                 // ================= LOGIN =================
@@ -60,8 +61,8 @@ public class Main {
                         break;
                     }
 
-                    System.out.println("✅ Welcome " + user.getName()
-                            + " (" + user.getRole() + ")");
+                    System.out.println("✅ Welcome " + user.getName() +
+                            " (" + user.getRole() + ")");
 
                     // =====================================================
                     // ================= JOB SEEKER ========================
@@ -78,7 +79,8 @@ public class Main {
                             System.out.println("4. Apply for Job");
                             System.out.println("5. View Applications");
                             System.out.println("6. Withdraw Application");
-                            System.out.println("7. Logout");
+                            System.out.println("7. View Notifications");
+                            System.out.println("8. Logout");
 
                             int ch = sc.nextInt();
                             sc.nextLine();
@@ -88,21 +90,21 @@ public class Main {
                                 case 1 -> js.viewAllJobs();
 
                                 case 2 -> {
-                                    System.out.print("Title (blank = any): ");
+                                    System.out.print("Title: ");
                                     String title = sc.nextLine();
 
-                                    System.out.print("Location (blank = any): ");
+                                    System.out.print("Location: ");
                                     String location = sc.nextLine();
 
-                                    System.out.print("Job Type (FULL_TIME / PART_TIME / blank): ");
+                                    System.out.print("Job Type: ");
                                     String type = sc.nextLine();
 
                                     System.out.print("Min Experience (0 = any): ");
-                                    int expIn = sc.nextInt();
+                                    int e = sc.nextInt();
                                     sc.nextLine();
 
-                                    Integer exp = (expIn <= 0) ? null : expIn;
-                                    js.searchJobs(title, location, type, exp);
+                                    js.searchJobs(title, location, type,
+                                            e <= 0 ? null : e);
                                 }
 
                                 case 3 -> {
@@ -121,10 +123,11 @@ public class Main {
                                     System.out.print("Education: ");
                                     r.setEducation(sc.nextLine());
 
-                                    if (js.createResume(r))
-                                        System.out.println("✅ Resume created");
-                                    else
-                                        System.out.println("❌ Resume failed");
+                                    System.out.println(
+                                            js.createResume(r)
+                                                    ? "✅ Resume created"
+                                                    : "❌ Resume failed"
+                                    );
                                 }
 
                                 case 4 -> {
@@ -132,10 +135,11 @@ public class Main {
                                     int jobId = sc.nextInt();
                                     sc.nextLine();
 
-                                    if (js.applyJob(user.getId(), jobId))
-                                        System.out.println("✅ Applied successfully");
-                                    else
-                                        System.out.println("❌ Application failed");
+                                    System.out.println(
+                                            js.applyJob(user.getId(), jobId)
+                                                    ? "✅ Applied successfully"
+                                                    : "❌ Application failed"
+                                    );
                                 }
 
                                 case 5 -> js.viewApplications(user.getId());
@@ -145,25 +149,28 @@ public class Main {
                                     int appId = sc.nextInt();
                                     sc.nextLine();
 
-                                    if (js.withdraw(appId))
-                                        System.out.println("✅ Application withdrawn");
-                                    else
-                                        System.out.println("❌ Withdraw failed");
+                                    System.out.println(
+                                            js.withdraw(appId)
+                                                    ? "✅ Application withdrawn"
+                                                    : "❌ Withdraw failed"
+                                    );
                                 }
 
-                                case 7 -> {
+                                case 7 -> js.viewNotifications(user.getId());
+
+                                case 8 -> {
                                     System.out.println("🔒 Logged out");
                                     break;
                                 }
                             }
-                            if (ch == 7) break;
+                            if (ch == 8) break;
                         }
                     }
 
                     // =====================================================
                     // ================= EMPLOYER ==========================
                     // =====================================================
-                    else if (user.getRole().equalsIgnoreCase("EMPLOYER")) {
+                    else {
 
                         EmployerService es = new EmployerService();
 
@@ -173,9 +180,17 @@ public class Main {
                             System.out.println("2. Post Job");
                             System.out.println("3. View My Jobs");
                             System.out.println("4. View Applicants");
-                            System.out.println("5. Shortlist Applicant");
-                            System.out.println("6. Reject Applicant");
-                            System.out.println("7. Logout");
+                            System.out.println("5. Filter Applicants");
+                            System.out.println("6. Shortlist Applicant");
+                            System.out.println("7. Reject Applicant");
+                            System.out.println("8. Bulk Shortlist");
+                            System.out.println("9. Bulk Reject");
+                            System.out.println("10. Add Comment");
+                            System.out.println("11. Edit Job");
+                            System.out.println("12. Close Job");
+                            System.out.println("13. Reopen Job");
+                            System.out.println("14. View Job Statistics");
+                            System.out.println("15. Logout");
 
                             int ch = sc.nextInt();
                             sc.nextLine();
@@ -198,20 +213,21 @@ public class Main {
                                     System.out.print("Description: ");
                                     c.setDescription(sc.nextLine());
 
-                                    if (es.createCompany(c))
-                                        System.out.println("✅ Company created");
-                                    else
-                                        System.out.println("❌ Company creation failed");
+                                    System.out.println(
+                                            es.createCompany(c)
+                                                    ? "✅ Company created"
+                                                    : "❌ Failed"
+                                    );
                                 }
 
                                 case 2 -> {
                                     Job j = new Job();
                                     j.setEmployerId(user.getId());
 
-                                    System.out.print("Job Title: ");
+                                    System.out.print("Title: ");
                                     j.setTitle(sc.nextLine());
 
-                                    System.out.print("Company Name: ");
+                                    System.out.print("Company: ");
                                     j.setCompany(sc.nextLine());
 
                                     System.out.print("Location: ");
@@ -227,53 +243,123 @@ public class Main {
                                     System.out.print("Job Type: ");
                                     j.setJobType(sc.nextLine());
 
-                                    if (es.postJob(j))
-                                        System.out.println("✅ Job posted");
-                                    else
-                                        System.out.println("❌ Job posting failed");
+                                    System.out.println(
+                                            es.postJob(j)
+                                                    ? "✅ Job posted"
+                                                    : "❌ Failed"
+                                    );
                                 }
 
                                 case 3 -> es.viewMyJobs(user.getId());
 
                                 case 4 -> {
                                     System.out.print("Job ID: ");
-                                    int jobId = sc.nextInt();
+                                    es.viewApplicants(sc.nextInt());
                                     sc.nextLine();
-                                    es.viewApplicants(jobId);
                                 }
 
                                 case 5 -> {
-                                    System.out.print("Application ID: ");
-                                    int appId = sc.nextInt();
+                                    System.out.print("Job ID: ");
+                                    int jobId = sc.nextInt();
                                     sc.nextLine();
-                                    es.updateApplicationStatus(appId, "SHORTLISTED");
-                                    System.out.println("✅ Applicant shortlisted");
+
+                                    System.out.print("Skill: ");
+                                    String skill = sc.nextLine();
+
+                                    System.out.print("Min Experience: ");
+                                    int e = sc.nextInt();
+                                    sc.nextLine();
+
+                                    System.out.print("Education: ");
+                                    String edu = sc.nextLine();
+
+                                    es.filterApplicants(jobId, skill,
+                                            e <= 0 ? null : e, edu);
                                 }
 
                                 case 6 -> {
                                     System.out.print("Application ID: ");
-                                    int appId = sc.nextInt();
+                                    es.updateApplicationStatus(sc.nextInt(), "SHORTLISTED");
                                     sc.nextLine();
-                                    es.updateApplicationStatus(appId, "REJECTED");
-                                    System.out.println("❌ Applicant rejected");
                                 }
 
                                 case 7 -> {
+                                    System.out.print("Application ID: ");
+                                    es.updateApplicationStatus(sc.nextInt(), "REJECTED");
+                                    sc.nextLine();
+                                }
+
+                                case 8 -> {
+                                    System.out.print("App IDs (1,2,3): ");
+                                    es.bulkShortlist(parseIds(sc.nextLine()));
+                                }
+
+                                case 9 -> {
+                                    System.out.print("App IDs (1,2,3): ");
+                                    es.bulkReject(parseIds(sc.nextLine()));
+                                }
+
+                                case 10 -> {
+                                    System.out.print("Application ID: ");
+                                    int id = sc.nextInt();
+                                    sc.nextLine();
+                                    System.out.print("Comment: ");
+                                    es.addComment(id, sc.nextLine());
+                                }
+
+                                case 11 -> {
+                                    Job j = new Job();
+                                    System.out.print("Job ID: ");
+                                    j.setId(sc.nextInt());
+                                    sc.nextLine();
+                                    j.setEmployerId(user.getId());
+
+                                    System.out.print("New Title: ");
+                                    j.setTitle(sc.nextLine());
+
+                                    System.out.print("Company: ");
+                                    j.setCompany(sc.nextLine());
+
+                                    System.out.print("Location: ");
+                                    j.setLocation(sc.nextLine());
+
+                                    System.out.print("Experience: ");
+                                    j.setExperience(sc.nextInt());
+
+                                    System.out.print("Salary: ");
+                                    j.setSalary(sc.nextDouble());
+                                    sc.nextLine();
+
+                                    System.out.print("Job Type: ");
+                                    j.setJobType(sc.nextLine());
+
+                                    es.updateJob(j);
+                                }
+
+                                case 12 -> es.closeJob(sc.nextInt());
+                                case 13 -> es.reopenJob(sc.nextInt());
+                                case 14 -> es.viewJobStatistics(sc.nextInt());
+
+                                case 15 -> {
                                     System.out.println("🔒 Logged out");
                                     break;
                                 }
                             }
-                            if (ch == 7) break;
+                            if (ch == 15) break;
                         }
                     }
                 }
 
-                // ================= EXIT =================
-                case 3 -> {
-                    System.out.println("👋 Thank you for using RevHire");
-                    System.exit(0);
-                }
+                case 3 -> System.exit(0);
             }
         }
+    }
+
+    private static List<Integer> parseIds(String input) {
+        List<Integer> list = new ArrayList<>();
+        for (String s : input.split(",")) {
+            list.add(Integer.parseInt(s.trim()));
+        }
+        return list;
     }
 }

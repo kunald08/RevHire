@@ -17,4 +17,20 @@ public interface ApplicationDao {
     boolean updateStatus(int applicationId, String status);
 
     boolean withdrawApplication(int appId);
+
+    int countByJobAndStatus(int jobId, String status);
+
+    List<Application> filterApplicants(
+            int jobId,
+            String skill,
+            Integer minExperience,
+            String education
+    );
+
+    boolean updateStatusBulk(List<Integer> applicationIds, String status);
+
+    boolean addComment(int applicationId, String comment);
+
+    int getUserIdByApplication(int applicationId);
+
 }

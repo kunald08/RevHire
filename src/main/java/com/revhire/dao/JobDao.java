@@ -17,4 +17,8 @@ public interface JobDao {
     boolean createJob(Job job);
     List<Job> getJobsByEmployer(int employerId);
 
+    boolean updateJob(Job job);
+
+    boolean updateJobStatus(int jobId, String status);
+
 }
