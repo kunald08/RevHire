@@ -26,8 +26,11 @@ public class ResumeDaoImpl implements ResumeDao {
         }
     }
 
+    @Override
     public Resume getResumeByUserId(int userId) {
+
         String sql = "SELECT * FROM resumes WHERE user_id=?";
+        Resume r = null;
 
         try (Connection con = DBUtil.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -36,19 +39,51 @@ public class ResumeDaoImpl implements ResumeDao {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                Resume r = new Resume();
+                r = new Resume();
                 r.setUserId(userId);
                 r.setObjective(rs.getString("objective"));
                 r.setSkills(rs.getString("skills"));
                 r.setExperience(rs.getString("experience"));
                 r.setEducation(rs.getString("education"));
-                return r;
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return r;
     }
+
+    @Override
+    public Resume getResumeByApplicationId(int applicationId) {
+
+        String sql =
+                "SELECT r.* FROM resumes r " +
+                        "JOIN applications a ON r.user_id = a.user_id " +
+                        "WHERE a.id=?";
+
+        Resume r = null;
+
+        try (Connection con = DBUtil.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, applicationId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                r = new Resume();
+                r.setObjective(rs.getString("objective"));
+                r.setSkills(rs.getString("skills"));
+                r.setExperience(rs.getString("experience"));
+                r.setEducation(rs.getString("education"));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return r;
+    }
+
+
 
 
 }

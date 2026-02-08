@@ -83,4 +83,21 @@ public class JobSeekerService {
                         System.out.println("🔔 " + n.getMessage())
                 );
     }
+
+    public void viewMyResume(int userId) {
+
+        Resume r = resumeDao.getResumeByUserId(userId);
+
+        if (r == null) {
+            System.out.println("❌ No resume found");
+            return;
+        }
+
+        System.out.println("\n===== MY RESUME =====");
+        System.out.println("Objective: " + r.getObjective());
+        System.out.println("Skills: " + r.getSkills());
+        System.out.println("Experience: " + r.getExperience());
+        System.out.println("Education: " + r.getEducation());
+    }
+
 }

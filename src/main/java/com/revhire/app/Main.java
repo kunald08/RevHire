@@ -61,8 +61,8 @@ public class Main {
                         break;
                     }
 
-                    System.out.println("✅ Welcome " + user.getName() +
-                            " (" + user.getRole() + ")");
+                    System.out.println("✅ Welcome " + user.getName()
+                            + " (" + user.getRole() + ")");
 
                     // =====================================================
                     // ================= JOB SEEKER ========================
@@ -76,11 +76,12 @@ public class Main {
                             System.out.println("1. View All Jobs");
                             System.out.println("2. Search Jobs");
                             System.out.println("3. Create Resume");
-                            System.out.println("4. Apply for Job");
-                            System.out.println("5. View Applications");
-                            System.out.println("6. Withdraw Application");
-                            System.out.println("7. View Notifications");
-                            System.out.println("8. Logout");
+                            System.out.println("4. View My Resume");
+                            System.out.println("5. Apply for Job");
+                            System.out.println("6. View Applications");
+                            System.out.println("7. Withdraw Application");
+                            System.out.println("8. View Notifications");
+                            System.out.println("9. Logout");
 
                             int ch = sc.nextInt();
                             sc.nextLine();
@@ -126,11 +127,13 @@ public class Main {
                                     System.out.println(
                                             js.createResume(r)
                                                     ? "✅ Resume created"
-                                                    : "❌ Resume failed"
+                                                    : "❌ Resume creation failed"
                                     );
                                 }
 
-                                case 4 -> {
+                                case 4 -> js.viewMyResume(user.getId());
+
+                                case 5 -> {
                                     System.out.print("Job ID: ");
                                     int jobId = sc.nextInt();
                                     sc.nextLine();
@@ -142,9 +145,9 @@ public class Main {
                                     );
                                 }
 
-                                case 5 -> js.viewApplications(user.getId());
+                                case 6 -> js.viewApplications(user.getId());
 
-                                case 6 -> {
+                                case 7 -> {
                                     System.out.print("Application ID: ");
                                     int appId = sc.nextInt();
                                     sc.nextLine();
@@ -156,14 +159,14 @@ public class Main {
                                     );
                                 }
 
-                                case 7 -> js.viewNotifications(user.getId());
+                                case 8 -> js.viewNotifications(user.getId());
 
-                                case 8 -> {
+                                case 9 -> {
                                     System.out.println("🔒 Logged out");
                                     break;
                                 }
                             }
-                            if (ch == 8) break;
+                            if (ch == 9) break;
                         }
                     }
 
@@ -180,17 +183,18 @@ public class Main {
                             System.out.println("2. Post Job");
                             System.out.println("3. View My Jobs");
                             System.out.println("4. View Applicants");
-                            System.out.println("5. Filter Applicants");
-                            System.out.println("6. Shortlist Applicant");
-                            System.out.println("7. Reject Applicant");
-                            System.out.println("8. Bulk Shortlist");
-                            System.out.println("9. Bulk Reject");
-                            System.out.println("10. Add Comment");
-                            System.out.println("11. Edit Job");
-                            System.out.println("12. Close Job");
-                            System.out.println("13. Reopen Job");
-                            System.out.println("14. View Job Statistics");
-                            System.out.println("15. Logout");
+                            System.out.println("5. View Applicant Resume");
+                            System.out.println("6. Filter Applicants");
+                            System.out.println("7. Shortlist Applicant");
+                            System.out.println("8. Reject Applicant");
+                            System.out.println("9. Bulk Shortlist");
+                            System.out.println("10. Bulk Reject");
+                            System.out.println("11. Add Comment");
+                            System.out.println("12. Edit Job");
+                            System.out.println("13. Close Job");
+                            System.out.println("14. Reopen Job");
+                            System.out.println("15. View Job Statistics");
+                            System.out.println("16. Logout");
 
                             int ch = sc.nextInt();
                             sc.nextLine();
@@ -259,6 +263,13 @@ public class Main {
                                 }
 
                                 case 5 -> {
+                                    System.out.print("Application ID: ");
+                                    int appId = sc.nextInt();
+                                    sc.nextLine();
+                                    es.viewApplicantResume(appId);
+                                }
+
+                                case 6 -> {
                                     System.out.print("Job ID: ");
                                     int jobId = sc.nextInt();
                                     sc.nextLine();
@@ -273,45 +284,51 @@ public class Main {
                                     System.out.print("Education: ");
                                     String edu = sc.nextLine();
 
-                                    es.filterApplicants(jobId, skill,
-                                            e <= 0 ? null : e, edu);
-                                }
-
-                                case 6 -> {
-                                    System.out.print("Application ID: ");
-                                    es.updateApplicationStatus(sc.nextInt(), "SHORTLISTED");
-                                    sc.nextLine();
+                                    es.filterApplicants(jobId,
+                                            skill,
+                                            e <= 0 ? null : e,
+                                            edu);
                                 }
 
                                 case 7 -> {
                                     System.out.print("Application ID: ");
-                                    es.updateApplicationStatus(sc.nextInt(), "REJECTED");
+                                    es.updateApplicationStatus(
+                                            sc.nextInt(), "SHORTLISTED");
                                     sc.nextLine();
                                 }
 
                                 case 8 -> {
-                                    System.out.print("App IDs (1,2,3): ");
-                                    es.bulkShortlist(parseIds(sc.nextLine()));
+                                    System.out.print("Application ID: ");
+                                    es.updateApplicationStatus(
+                                            sc.nextInt(), "REJECTED");
+                                    sc.nextLine();
                                 }
 
                                 case 9 -> {
-                                    System.out.print("App IDs (1,2,3): ");
-                                    es.bulkReject(parseIds(sc.nextLine()));
+                                    System.out.print("Application IDs (1,2,3): ");
+                                    es.bulkShortlist(parseIds(sc.nextLine()));
                                 }
 
                                 case 10 -> {
-                                    System.out.print("Application ID: ");
-                                    int id = sc.nextInt();
-                                    sc.nextLine();
-                                    System.out.print("Comment: ");
-                                    es.addComment(id, sc.nextLine());
+                                    System.out.print("Application IDs (1,2,3): ");
+                                    es.bulkReject(parseIds(sc.nextLine()));
                                 }
 
                                 case 11 -> {
+                                    System.out.print("Application ID: ");
+                                    int appId = sc.nextInt();
+                                    sc.nextLine();
+
+                                    System.out.print("Comment: ");
+                                    es.addComment(appId, sc.nextLine());
+                                }
+
+                                case 12 -> {
                                     Job j = new Job();
                                     System.out.print("Job ID: ");
                                     j.setId(sc.nextInt());
                                     sc.nextLine();
+
                                     j.setEmployerId(user.getId());
 
                                     System.out.print("New Title: ");
@@ -336,21 +353,24 @@ public class Main {
                                     es.updateJob(j);
                                 }
 
-                                case 12 -> es.closeJob(sc.nextInt());
-                                case 13 -> es.reopenJob(sc.nextInt());
-                                case 14 -> es.viewJobStatistics(sc.nextInt());
+                                case 13 -> es.closeJob(sc.nextInt());
+                                case 14 -> es.reopenJob(sc.nextInt());
+                                case 15 -> es.viewJobStatistics(sc.nextInt());
 
-                                case 15 -> {
+                                case 16 -> {
                                     System.out.println("🔒 Logged out");
                                     break;
                                 }
                             }
-                            if (ch == 15) break;
+                            if (ch == 16) break;
                         }
                     }
                 }
 
-                case 3 -> System.exit(0);
+                case 3 -> {
+                    System.out.println("👋 Thank you for using RevHire");
+                    System.exit(0);
+                }
             }
         }
     }
