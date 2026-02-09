@@ -3,22 +3,26 @@ package com.revhire.dao;
 import com.revhire.model.Job;
 import java.util.List;
 
+/**
+ * Data access contract for job operations.
+ */
 public interface JobDao {
 
     List<Job> getAllJobs();
 
-    List<Job> searchJobs(
-            String title,
-            String location,
-            String jobType,
-            Integer minExperience
-    );
+    List<Job> searchJobs(String title, String location, String jobType,
+                         Integer minExperience, String company,
+                         Double salaryMin, Double salaryMax);
+
+    Job getJobById(int jobId);
 
     boolean createJob(Job job);
+
     List<Job> getJobsByEmployer(int employerId);
 
     boolean updateJob(Job job);
 
     boolean updateJobStatus(int jobId, String status);
 
+    boolean deleteJob(int jobId, int employerId);
 }
