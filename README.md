@@ -79,17 +79,17 @@ sql/
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                    PRESENTATION LAYER                    │
-│  ┌───────────────────────────────────────────────────┐  │
-│  │                   Main.java                        │  │
+│                    PRESENTATION LAYER                   │
+│  ┌───────────────────────────────────────-────────────┐ │
+│  │                   Main.java                        │ │
 │  │  • Welcome Menu (Register Seeker / Employer / Login) │
-│  │  • Job Seeker Menu (15 options)                    │  │
-│  │  • Employer Menu (21 options)                      │  │
-│  │  • Input validation & display formatting           │  │
+│  │  • Job Seeker Menu (15 options)                    │ │
+│  │  • Employer Menu (21 options)                      │ │
+│  │  • Input validation & display formatting           │ │
 │  └──────────────────────┬────────────────────────────┘  │
 ├─────────────────────────┼───────────────────────────────┤
 │                    SERVICE LAYER                        │
-│  ┌──────────┐  ┌──────────────┐  ┌──────────────────┐  │
+│  ┌──────────┐   ┌──────────────┐  ┌──────────────────┐  │
 │  │AuthService│  │JobSeekerSvc  │  │  EmployerService │  │
 │  │• register │  │• searchJobs  │  │• postJob         │  │
 │  │• login    │  │• applyJob    │  │• bulkShortlist   │  │
@@ -98,27 +98,27 @@ sql/
 │  │• getUserBy│  │• notifications│ │• updateCompany   │  │
 │  └─────┬─────┘  └──────┬───────┘  └────────┬─────────┘  │
 ├────────┼───────────────┼────────────────────┼───────────┤
-│                   DAO LAYER (Interfaces)                 │
-│  ┌────────┐ ┌──────┐ ┌─────────┐ ┌──────────┐          │
-│  │UserDao │ │JobDao│ │ResumeDao│ │CompanyDao│          │
-│  └───┬────┘ └──┬───┘ └───┬─────┘ └────┬─────┘          │
+│                   DAO LAYER (Interfaces)                │
+│  ┌────────┐ ┌──────┐ ┌─────────┐ ┌──────────┐           │
+│  │UserDao │ │JobDao│ │ResumeDao│ │CompanyDao│           │
+│  └───┬────┘ └──┬───┘ └───┬─────┘ └────┬─────┘           │
 │  ┌────────────┐ ┌──────────────┐ ┌──────────────┐       │
-│  │ApplicationDao│ │NotificationDao│              │       │
+│  │ApplicationDao│ │NotificationDao│             │       │
 │  └──────┬──────┘ └──────┬───────┘               │       │
 ├─────────┼──────────────┼────────────────────────┤       │
-│                DAO IMPL LAYER                    │       │
-│  • PreparedStatement for all queries             │       │
-│  • Transaction management (delete job)           │       │
-│  • Dynamic WHERE clause building (search/filter) │       │
-├──────────────────────────────────────────────────┤       │
-│               DATABASE (MySQL 8+)                │       │
-│  ┌──────┐ ┌────┐ ┌───────┐ ┌─────────────┐      │       │
-│  │users │ │jobs│ │resumes│ │applications │      │       │
-│  └──────┘ └────┘ └───────┘ └─────────────┘      │       │
-│  ┌─────────┐ ┌──────────────┐                    │       │
-│  │companies│ │notifications │                    │       │
-│  └─────────┘ └──────────────┘                    │       │
-└──────────────────────────────────────────────────┘       │
+│                DAO IMPL LAYER                    │      │
+│  • PreparedStatement for all queries             │      │
+│  • Transaction management (delete job)           │      │
+│  • Dynamic WHERE clause building (search/filter) │      │
+├──────────────────────────────────────────────────┤      │
+│               DATABASE (MySQL 8+)                │      │
+│  ┌──────┐ ┌────┐ ┌───────┐ ┌─────────────┐       │      │
+│  │users │ │jobs│ │resumes│ │applications │       │      │
+│  └──────┘ └────┘ └───────┘ └─────────────┘       │      │
+│  ┌─────────┐ ┌──────────────┐                    │      │
+│  │companies│ │notifications │                    │      │
+│  └─────────┘ └──────────────┘                    │      │
+└──────────────────────────────────────────────────┘      │
 ```
 
 **Design principles:**
@@ -146,7 +146,7 @@ sql/
 │     education     TEXT       │       │     website       VARCHAR      │  │
 │     work_experience TEXT     │       │     location      VARCHAR      │  │
 │     skills        TEXT       │       │     created_at    TIMESTAMP    │  │
-│     certifications TEXT      │       └─────────────────────────────────┘  │
+│     certifications TEXT      │       └─────────────────────────────────┘ │
 │     security_question VARCHAR│                                           │
 │     security_answer VARCHAR  │                                           │
 │     created_at    TIMESTAMP  │                                           │
@@ -161,21 +161,21 @@ sql/
     ┌──────┴──────────────────┐     ┌┴────────────────────────────────────┐
     │        RESUMES          │     │              JOBS                   │
     ├─────────────────────────┤     ├─────────────────────────────────────┤
-    │ PK  id        INT AUTO  │     │ PK  id              INT AUTO       │
-    │ FK  user_id   INT (UQ)  │     │ FK  employer_id     INT            │
-    │     objective TEXT       │     │     title           VARCHAR        │
-    │     education TEXT       │     │     description     TEXT           │
-    │     experience TEXT      │     │     company         VARCHAR        │
-    │     skills    TEXT       │     │     location        VARCHAR        │
-    │     projects  TEXT       │     │     experience      INT            │
-    │     created_at TIMESTAMP │     │     salary_min      DECIMAL       │
-    └─────────────────────────┘     │     salary_max      DECIMAL       │
-                                    │     job_type        ENUM           │
-                                    │     skills_required TEXT           │
-           │                        │     education_req   VARCHAR        │
-           │                        │     deadline        DATE           │
-           │                        │     status          ENUM           │
-           │                        │     created_at      TIMESTAMP      │
+    │ PK  id        INT AUTO  │     │ PK  id              INT AUTO        │
+    │ FK  user_id   INT (UQ)  │     │ FK  employer_id     INT             │
+    │     objective TEXT      │     │     title           VARCHAR         │
+    │     education TEXT      │     │     description     TEXT            │
+    │     experience TEXT     │     │     company         VARCHAR         │
+    │     skills    TEXT      │     │     location        VARCHAR         │
+    │     projects  TEXT      │     │     experience      INT             │
+    │     created_at TIMESTAMP│     │     salary_min      DECIMAL         │
+    └─────────────────────────┘     │     salary_max      DECIMAL         │
+                                    │     job_type        ENUM            │
+                                    │     skills_required TEXT            │
+           │                        │     education_req   VARCHAR         │
+           │                        │     deadline        DATE            │
+           │                        │     status          ENUM            │
+           │                        │     created_at      TIMESTAMP       │
            │                        └──────────┬──────────────────────────┘
            │                                   │
            │  1:N                              │  1:N
@@ -188,9 +188,9 @@ sql/
            │    │ FK  job_id          INT    ──── JOBS.id            │
            │    │     status          ENUM (APPLIED/SHORTLISTED/     │
            │    │                          REJECTED/WITHDRAWN)       │
-           │    │     cover_letter    TEXT                            │
+           │    │     cover_letter    TEXT                           │
            │    │     withdraw_reason VARCHAR                        │
-           │    │     comment         TEXT                            │
+           │    │     comment         TEXT                           │
            │    │     applied_at      TIMESTAMP                      │
            │    │     UNIQUE(user_id, job_id)                        │
            │    └────────────────────────────────────────────────────┘
@@ -202,9 +202,9 @@ sql/
     ├──────────────────────────────────────────────────┤
     │ PK  id              INT AUTO                     │
     │ FK  user_id         INT    ──── USERS.id         │
-    │     message         TEXT                          │
-    │     is_read         BOOLEAN (DEFAULT FALSE)       │
-    │     created_at      TIMESTAMP                     │
+    │     message         TEXT                         │
+    │     is_read         BOOLEAN (DEFAULT FALSE)      │
+    │     created_at      TIMESTAMP                    │
     └──────────────────────────────────────────────────┘
 
 Relationships:
